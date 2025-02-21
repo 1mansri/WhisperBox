@@ -3,7 +3,7 @@ import VerificationEmail
 from "../../emails/VerificationEmail";
 import { ApiResponse } from "@/types/Apiresponse";
 import nodemailer from 'nodemailer';
-import { renderToString } from 'react-dom/server';
+import { render } from '@react-email/components';
 
 export async function sendVerificationEmail(
     email:string,
@@ -17,11 +17,14 @@ export async function sendVerificationEmail(
         //     subject: 'Verify Code',
         //     react: VerificationEmail({username, otp: verifyCode}),
         //   });
+
+        const emailHtml = await render(VerificationEmail({username, otp: verifyCode}));
+        
         const mailOptions = {
             from: `"${sender.name}" <${sender.email}>`,
             to: email,
             subject: "Email Verification",
-            html: renderToString(VerificationEmail({username, otp: verifyCode})),
+            html: emailHtml,
         }
         await transporter.sendMail(mailOptions);
 
