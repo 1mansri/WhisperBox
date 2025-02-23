@@ -141,7 +141,7 @@ export default function SignUpForm() {
                   <Input {...field} 
                      placeholder="Enter Your Email" className="border border-gray-700"
                     name="email" />
-                  <p className='text-muted text-gray-600 text-sm'>We will send you a verification code</p>
+                  <p className='text-muted text-gray-700 text-sm'>We will send you a verification code</p>
                   <FormMessage />
                 </FormItem>
               )}
