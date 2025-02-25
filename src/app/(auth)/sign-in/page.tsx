@@ -51,6 +51,7 @@ export default function SignInForm() {
       if (result?.url) {
         router.replace('/dashboard')
       }
+      setIsSubmitting(false);
     } catch (error: Error | unknown) {
       const errorMessage = error instanceof Error 
         ? error.message 
@@ -59,7 +60,6 @@ export default function SignInForm() {
       toast.error("Error", {
         description: errorMessage,
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
