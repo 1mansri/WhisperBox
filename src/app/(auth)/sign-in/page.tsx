@@ -35,6 +35,7 @@ export default function SignInForm() {
 
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    console.log("clicked on sign in button")
     setIsSubmitting(true);
     try {
       const result = await signIn('credentials', {
@@ -102,7 +103,9 @@ export default function SignInForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className='w-full' disabled={isSubmitting}>
+            <Button type="submit" className='w-full'
+              onClick={() =>{console.log("clicked on sign in button")}} 
+              disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
