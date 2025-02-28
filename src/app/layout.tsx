@@ -7,8 +7,8 @@ import { Toaster } from "@/components/ui/sonner"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Know your Enemy!",
-  description: "A simple app to help you learn about your enemies.",
+  title: "Know yourSelf!",
+  description: "A simple app to help you learn about you.",
 };
 
 export default function RootLayout({
