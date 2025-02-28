@@ -42,7 +42,7 @@ export async function GET() {
         return Response.json(
         {
             success: true,
-            data: user[0].messages,
+            messages: user[0].messages,
         }, { status: 200 }
         )
         

@@ -23,7 +23,7 @@ export default function RootLayout({
           className={`antialiased ${inter.className}`}
         >
           {children}
-          <Toaster richColors />
+          <Toaster position="top-right" richColors />
         </body>
       </AuthProvider>
     </html>
