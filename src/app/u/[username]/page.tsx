@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Loader2 } from "lucide-react";
+import { Loader2, MessageSquareText, Sparkles, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
@@ -23,12 +23,7 @@ import { ApiResponse } from "@/types/Apiresponse";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { messageSchema } from "@/schemas/messageSchema";
-
-// const specialChar = "||";
-
-// const parseStringMessages = (messageString: string): string[] => {
-//   return messageString.split(specialChar);
-// };
+import { motion } from "framer-motion";
 
 const initialMessageString =
   "What's your favorite movie?||Do you have any pets?||What's your dream job?";
@@ -41,23 +36,6 @@ export default function SendMessage() {
   );
   const [isSuggestLoading, setIsSuggestLoading] = useState(false);
   const [suggestError, setSuggestError] = useState<string | null>(null);
-
-  // const {
-  //   complete,
-  //   completion,
-  //   isLoading: isSuggestLoading,
-  //   error,
-  // } = useCompletion({
-  //   api: "/api/suggest-messages",
-  //   initialCompletion: initialMessageString,
-  //   onFinish: (result) => {
-  //     console.log("Completion result:", result);
-  //   },
-  //   onError: (error) => {
-  //     console.error("Completion error:", error);
-  //     toast.error("Failed to get message suggestions");
-  //   },
-  // });
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -125,76 +103,114 @@ export default function SendMessage() {
   };
 
   return (
-    <div className="flex flex-col items-center min-w-full bg-[#525252] h-full min-h-screen">
-      <div className="container mx-auto my-8 p-6 rounded max-w-4xl">
-        <h1 className="text-4xl font-bold mb-6 text-center">
-          Public Profile Link
-        </h1>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Send Anonymous Message to @{username}</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Write your anonymous message here"
-                      className="resize-none bg-[#ffede0] "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex justify-center">
-              {isLoading ? (
-                <Button disabled>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Please wait
-                </Button>
-              ) : (
-                <Button type="submit" disabled={isLoading || !messageContent}>
-                  Send It
-                </Button>
-              )}
-            </div>
-          </form>
-        </Form>
+    <div className="flex flex-col items-center min-w-full bg-gradient-to-b from-indigo-900 to-purple-900 min-h-screen">
+      <div className="container mx-auto my-8 p-6 max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-300 mb-2">
+            Send Anonymous Message
+          </h1>
+          <p className="text-indigo-200">
+            Your message will be delivered privately to @{username}
+          </p>
+        </motion.div>
+        
+        <Card className="bg-white/10 backdrop-blur-md border border-indigo-200/20 shadow-xl mb-8">
+          <CardContent className="p-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-medium text-indigo-100">
+                        <div className="flex items-center gap-2">
+                          <MessageSquareText className="h-5 w-5 text-pink-400" />
+                          <span>Write to @{username}</span>
+                        </div>
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Share your thoughts anonymously..."
+                          className="resize-none bg-white/20 border-indigo-300/30 text-white placeholder:text-indigo-200/70 focus:ring-2 focus:ring-pink-400/50 min-h-32"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-pink-300" />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex justify-center">
+                  {isLoading ? (
+                    <Button disabled className="bg-gradient-to-r from-indigo-600/80 to-purple-600/80 text-white px-8">
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Sending...
+                    </Button>
+                  ) : (
+                    <Button 
+                      type="submit" 
+                      disabled={isLoading || !messageContent}
+                      className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-md shadow-purple-900/20 px-8"
+                    >
+                      <Send className="mr-2 h-4 w-4" />
+                      Send Message
+                    </Button>
+                  )}
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
 
-        <div className="space-y-4 my-8">
-          <div className="space-y-2">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-4 my-8"
+        >
+          <div className="flex flex-col items-center space-y-4">
             <Button
               onClick={fetchSuggestedMessages}
-              className="my-4"
+              className="bg-pink-500 hover:bg-pink-600 text-white shadow-md"
               disabled={isSuggestLoading}
             >
               {isSuggestLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Loading...
+                  Generating ideas...
                 </>
               ) : (
-                "Suggest Messages"
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Get Message Ideas
+                </>
               )}
             </Button>
-            <p>Click on any message below to select it.</p>
+            <p className="text-indigo-200 text-center">
+              Need inspiration? Click on any message below to use it.
+            </p>
           </div>
-          <Card className="w-full bg-[#ffede0]">
+          
+          <Card className="w-full bg-white/10 backdrop-blur-md border border-indigo-200/20 shadow-xl">
             <CardHeader>
-              <h3 className="text-xl font-semibold">Messages</h3>
+              <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-300">
+                Message Ideas
+              </h3>
             </CardHeader>
-            <CardContent className="flex flex-col space-y-4">
+            <CardContent className="grid gap-3 sm:grid-cols-2">
               {suggestError ? (
-                <p className="text-red-500">{suggestError}</p>
+                <p className="text-pink-300 col-span-2">{suggestError}</p>
               ) : (
                 suggestedMessages.map((message, index) => (
                   <Button
                     key={index}
                     variant="outline"
-                    className="mb-2 py-8 text-wrap text-center bg-[#ffede0] border-b-2 border-[#5a5a5a]"
+                    className="p-4 h-auto text-left text-wrap justify-start border border-indigo-300/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm text-indigo-100"
                     onClick={() => handleMessageClick(message)}
                   >
                     {message}
@@ -203,14 +219,26 @@ export default function SendMessage() {
               )}
             </CardContent>
           </Card>
-        </div>
-        <Separator className="my-6" />
-        <div className="text-center">
-          <div className="mb-4">Get Your Message Board</div>
+        </motion.div>
+        
+        <Separator className="my-6 bg-indigo-300/20" />
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="text-center bg-white/10 backdrop-blur-md border border-indigo-200/20 rounded-lg p-6 shadow-xl"
+        >
+          <div className="mb-4 text-lg text-indigo-100">
+            Want your own anonymous message board?
+          </div>
           <Link href={"/sign-up"}>
-            <Button>Create Your Account</Button>
+            <Button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white shadow-md">
+              <Sparkles className="mr-2 h-4 w-4" />
+              Create Your WhisperBox
+            </Button>
           </Link>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

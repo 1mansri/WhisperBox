@@ -4,7 +4,7 @@ import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
-  title: "Know yourSelf!",
+  title: "Whisper Box",
   description: "A simple app to help you to know more about you.",
 };
 

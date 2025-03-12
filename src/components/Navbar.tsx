@@ -12,7 +12,8 @@ import {
   LogOut, 
   LogIn, 
   MessageSquare, 
-  User as UserIcon
+  User as UserIcon,
+  Sparkles
 } from 'lucide-react'
 import {
   Sheet,
@@ -24,7 +25,7 @@ import {
 
 const Navbar = () => {
   const { data: session } = useSession()
-  const user= session?.user as User
+  const user = session?.user as User
   const [isOpen, setIsOpen] = useState(false)
   const logoRef = useRef(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -60,8 +61,11 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 border-b py-3"
-      style={{ backgroundColor: '#3a4a61', borderBottomColor: 'rgba(255,255,255,0.1)' }}
+      className="sticky top-0 z-50 border-b py-3 backdrop-blur-md"
+      style={{ 
+        backgroundColor: 'rgba(67, 56, 202, 0.85)', 
+        borderBottomColor: 'rgba(255,255,255,0.1)' 
+      }}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
@@ -70,12 +74,12 @@ const Navbar = () => {
             <motion.div 
               ref={logoRef}
               className="flex items-center space-x-2 font-bold text-xl"
-              style={{ color: '#ff764b' }}
+              style={{ color: '#f471b5' }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <MessageSquare className="h-6 w-6" style={{ color: '#ff764b' }} />
-              <span className="hidden sm:inline">Mystry message</span>
+              <Sparkles className="h-6 w-6" style={{ color: '#f471b5' }} />
+              <span className="hidden sm:inline">WhisperBox</span>
             </motion.div>
           </Link>
 
@@ -93,32 +97,32 @@ const Navbar = () => {
                 >
                   <motion.div 
                     className="flex items-center space-x-2 rounded-full px-4 py-2"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-                    whileHover={{ backgroundColor: "rgba(255,255,255,0.2)" }}
+                    style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+                    whileHover={{ backgroundColor: "rgba(255,255,255,0.25)" }}
                   >
-                    <UserIcon className="h-4 w-4" style={{ color: '#ff764b' }} />
+                    <UserIcon className="h-4 w-4" style={{ color: '#f471b5' }} />
                     <span className="text-sm font-medium text-white">
                       {user?.username || user?.email}
                     </span>
                   </motion.div>
                   <Link href="/dashboard">
                     <Button 
-                      className="flex items-center space-x-1"
-                      style={{ backgroundColor: '#ff764b', color: 'white' }}
+                      className="flex items-center space-x-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md"
                     >
                       <MessageSquare className="h-4 w-4 mr-1" />
-                      Dashboard
+                      Messages
                     </Button>
                   </Link>
                   
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button 
                       onClick={() => signOut()}
-                      className="flex items-center space-x-1"
-                      style={{ backgroundColor: '#ff764b', color: 'white' }}
+                      className="flex items-center space-x-1 bg-pink-500 hover:bg-pink-600 shadow-md"
+                      variant="outline"
+                      style={{ borderColor: 'rgba(255,255,255,0.2)' }}
                     >
                       <LogOut className="h-4 w-4 mr-1" />
-                      Logout
+                      Sign out
                     </Button>
                   </motion.div>
                 </motion.div>
@@ -134,11 +138,10 @@ const Navbar = () => {
                 >
                   <Link href="/sign-in">
                     <Button 
-                      className="flex items-center space-x-1"
-                      style={{ backgroundColor: '#ff764b', color: 'white' }}
+                      className="flex items-center space-x-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md"
                     >
                       <LogIn className="h-4 w-4 mr-1" />
-                      Login
+                      Sign in
                     </Button>
                   </Link>
                 </motion.div>
@@ -150,18 +153,20 @@ const Navbar = () => {
           <div className="md:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8" style={{ color: '#ff764b' }}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-white">
                   {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
                 </Button>
               </SheetTrigger>
-              <SheetContent style={{ backgroundColor: '#3a4a61', color: 'white' }}>
+              <SheetContent className="backdrop-blur-xl bg-gradient-to-br from-indigo-900/90 to-purple-900/90 border-l border-white/10 text-white">
                 <SheetHeader>
-                  <SheetTitle style={{ color: '#ff764b' }}>Navigation Menu</SheetTitle>
+                  <SheetTitle className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-400">
+                    WhisperBox Menu
+                  </SheetTitle>
                 </SheetHeader>
                 <div ref={menuRef} className="flex flex-col space-y-4 mt-4">
-                  <Link href="/" className="menu-item flex items-center space-x-2 font-bold text-xl py-2" style={{ color: '#ff764b' }} onClick={() => setIsOpen(false)}>
-                    <MessageSquare className="h-6 w-6" />
-                    <span>Mystry message</span>
+                  <Link href="/" className="menu-item flex items-center space-x-2 font-bold text-xl py-2" style={{ color: '#f471b5' }} onClick={() => setIsOpen(false)}>
+                    <Sparkles className="h-6 w-6" />
+                    <span>WhisperBox</span>
                   </Link>
                   
                   <AnimatePresence mode="wait">
@@ -173,26 +178,25 @@ const Navbar = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-4"
                       >
-                        <div className="menu-item flex items-center space-x-2 py-2">
-                          <UserIcon className="h-6 w-6" style={{ color: '#ff764b' }} />
+                        <div className="menu-item flex items-center space-x-2 py-2 px-3 rounded-lg bg-white/10">
+                          <UserIcon className="h-5 w-5" style={{ color: '#f471b5' }} />
                           <span className="text-lg font-medium text-white">
                             {user.username || user.email}
                           </span>
                         </div>
-                        <Link href="/dashboard" className="menu-item flex items-center text-lg font-medium space-x-2 py-2" onClick={() => setIsOpen(false)}>
-                          <MessageSquare className="h-6 w-6 mr-2" style={{ color: '#ff764b' }} />
-                          Dashboard
+                        <Link href="/dashboard" className="menu-item flex items-center text-lg font-medium space-x-2 py-2 px-3 rounded-lg hover:bg-white/10" onClick={() => setIsOpen(false)}>
+                          <MessageSquare className="h-5 w-5 mr-2" style={{ color: '#f471b5' }} />
+                          Messages
                         </Link>
                         <Button 
                           onClick={() => {
                             signOut();
                             setIsOpen(false);
                           }}
-                          className="menu-item flex items-center justify-center space-x-1 w-full"
-                          style={{ backgroundColor: '#ff764b', color: 'white' }}
+                          className="menu-item flex items-center justify-center space-x-1 w-full bg-pink-500 hover:bg-pink-600 shadow-md"
                         >
                           <LogOut className="h-4 w-4 mr-1" />
-                          Logout
+                          Sign out
                         </Button>
                       </motion.div>
                     ) : (
@@ -204,11 +208,10 @@ const Navbar = () => {
                       >
                         <Link href="/sign-in" className="w-full" onClick={() => setIsOpen(false)}>
                           <Button 
-                            className="menu-item flex items-center justify-center space-x-1 w-full"
-                            style={{ backgroundColor: '#ff764b', color: 'white' }}
+                            className="menu-item flex items-center justify-center space-x-1 w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md"
                           >
                             <LogIn className="h-4 w-4 mr-1" />
-                            Login
+                            Sign in
                           </Button>
                         </Link>
                       </motion.div>

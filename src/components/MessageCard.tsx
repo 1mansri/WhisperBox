@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import dayjs from "dayjs";
-import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
@@ -15,13 +14,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Instagram, X } from "lucide-react";
+import { Instagram, Trash2, Share2, MedalIcon } from "lucide-react";
 import { Message } from "@/models/User.model";
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/Apiresponse";
 import { motion } from "framer-motion";
-import { Share2 } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -39,44 +37,53 @@ type MessageCardProps = {
 export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
   const messageCardRef = useRef<HTMLDivElement>(null);
 
-  const shareAsImage = async () => {
+  const shareAsImage = async (platform: 'instagram' | 'whatsapp') => {
     if (!messageCardRef.current) return;
 
     try {
       // Create a wrapper div with gradient background
       const wrapper = document.createElement("div");
-      wrapper.style.background = "#ffede0";
+      
+      // Different styling based on platform
+      if (platform === 'instagram') {
+        wrapper.style.background = "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)";
+      } else {
+        wrapper.style.background = "linear-gradient(135deg, #4f46e5, #7e22ce)";
+      }
+      
       wrapper.style.padding = "48px";
       wrapper.style.width = "800px";
       wrapper.style.borderRadius = "24px";
       wrapper.style.display = "flex";
       wrapper.style.flexDirection = "column";
       wrapper.style.gap = "24px";
+      wrapper.style.boxShadow = "0 10px 25px rgba(0, 0, 0, 0.2)";
 
       // Style the message
       const messageDiv = document.createElement("div");
       messageDiv.style.fontSize = "32px";
       messageDiv.style.fontWeight = "600";
-      messageDiv.style.color = "#525252";
+      messageDiv.style.color = "#ffffff";
       messageDiv.style.lineHeight = "1.4";
       messageDiv.textContent = message.content;
+      messageDiv.style.textShadow = "0 2px 4px rgba(0, 0, 0, 0.1)";
       wrapper.appendChild(messageDiv);
 
       // Style the date
       const dateDiv = document.createElement("div");
       dateDiv.style.fontSize = "16px";
-      dateDiv.style.color = "#6B7280";
+      dateDiv.style.color = "rgba(255, 255, 255, 0.9)";
       dateDiv.textContent = new Date(message.createdAt).toLocaleDateString();
       wrapper.appendChild(dateDiv);
 
       // Add branding
       const brandingDiv = document.createElement("div");
       brandingDiv.style.marginTop = "32px";
-      brandingDiv.style.color = "#4B5563";
+      brandingDiv.style.color = "rgba(255, 255, 255, 0.8)";
       brandingDiv.style.fontSize = "14px";
       brandingDiv.style.fontFamily = "system-ui, -apple-system, sans-serif";
       brandingDiv.style.textAlign = "center";
-      brandingDiv.textContent = "shared via Mystery Messages";
+      brandingDiv.textContent = "✨ shared via Mystery Messages ✨";
       wrapper.appendChild(brandingDiv);
 
       // Temporarily append to body for html2canvas
@@ -85,7 +92,6 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
       document.body.appendChild(wrapper);
 
       const canvas = await html2canvas(wrapper, {
-        backgroundColor: "#ffede0",
         scale: 2,
         logging: false,
         useCORS: true,
@@ -100,7 +106,11 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
       link.click();
 
       toast.success(
-        "Image downloaded! You can now share it on Instagram or as a status."
+        `Image downloaded! Ready to share on ${platform === 'instagram' ? 'Instagram' : 'WhatsApp'}.`,
+        {
+          icon: platform === 'instagram' ? '📸' : '💬',
+          style: { background: platform === 'instagram' ? '#E1306C' : '#25D366', color: 'white' }
+        }
       );
     } catch (error) {
       toast.error("Failed to generate image" + error);
@@ -123,75 +133,132 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
     }
   };
 
+  // Card animation variants
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    },
+    hover: {
+      y: -5,
+      boxShadow: "0 10px 25px rgba(139, 92, 246, 0.3)",
+      transition: {
+        duration: 0.3
+      }
+    }
+  };
+
+  // Button animation variants
+  const buttonVariants = {
+    hover: {
+      scale: 1.05,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut"
+      }
+    },
+    tap: {
+      scale: 0.95
+    }
+  };
+
   return (
     <motion.div
       ref={messageCardRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-lg p-6 shadow-lg relative group"
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover="hover"
+      className="bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-lg rounded-xl p-6 shadow-xl border border-indigo-500/30 relative group overflow-hidden"
     >
-      <CardHeader>
+      {/* Decorative elements */}
+      <div className="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-xl"></div>
+      <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-xl"></div>
+      
+      <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="message-text">{message.content}</CardTitle>
+          <CardTitle className="message-text text-lg font-bold text-indigo-400 dark:text-indigo-200">
+            {message.content}
+          </CardTitle>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <X className="w-5 h-5" />
-              </Button>
+              <motion.button
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+                className="text-rose-500 hover:text-rose-600 bg-rose-100 hover:bg-rose-200 p-2 rounded-full transition-colors duration-200"
+              >
+                <Trash2 className="w-4 h-4" />
+              </motion.button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white border border-indigo-500/50">
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  this message.
+                <AlertDialogTitle className="text-rose-300">Are you sure you want to delete?</AlertDialogTitle>
+                <AlertDialogDescription className="text-slate-300">
+                  This magical message will disappear forever once deleted.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDeleteConfirm}>
-                  Continue
+                <AlertDialogCancel className="bg-slate-800 text-white hover:bg-slate-700 border border-slate-600">
+                  Keep it
+                </AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={handleDeleteConfirm}
+                  className="bg-rose-500 hover:bg-rose-600 text-white"
+                >
+                  Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <div className="text-sm">
-          {dayjs(message.createdAt).format("MMM D, YYYY h:mm A")}
+        <div className="text-sm text-purple-400 dark:text-purple-300 mt-1 font-medium">
+          {dayjs(message.createdAt).format("MMM D, YYYY • h:mm A")}
         </div>
       </CardHeader>
-      <CardContent>
+      
+      <CardContent className="pt-4">
         <div className="flex justify-between items-center">
           <div className="flex gap-2">
             <Popover>
               <PopoverTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-accent hover:text-accent-foreground"
+                <motion.button
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                  className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full text-sm font-medium shadow-md hover:shadow-lg transition-shadow duration-300"
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <Share2 className="h-4 w-4" />
-                    </motion.div>
-                  </motion.div>
-                </Button>
+                  <Share2 className="h-4 w-4" />
+                  <span>Share</span>
+                </motion.button>
               </PopoverTrigger>
-              <PopoverContent className="w-48 p-2">
+              <PopoverContent className="w-56 p-3 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border border-indigo-300 dark:border-indigo-800 shadow-xl">
                 <div className="flex flex-col gap-2">
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    onClick={shareAsImage}
-                    className="flex items-center gap-2 p-2 hover:bg-accent rounded-md cursor-pointer"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    onClick={() => shareAsImage('instagram')}
+                    className="flex items-center gap-2 p-2 hover:bg-purple-100 dark:hover:bg-purple-900/40 rounded-md cursor-pointer transition-colors duration-200"
                   >
-                    <Instagram className="h-4 w-4" />
-                    <span>Save as Image</span>
+                    <Instagram className="h-4 w-4 text-pink-600" />
+                    <span className="text-sm font-medium">Save for Instagram</span>
+                  </motion.button>
+                  
+                  <motion.button
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    onClick={() => shareAsImage('whatsapp')}
+                    className="flex items-center gap-2 p-2 hover:bg-purple-100 dark:hover:bg-purple-900/40 rounded-md cursor-pointer transition-colors duration-200"
+                  >
+                    <MedalIcon className="h-4 w-4 text-green-600" />
+                    <span className="text-sm font-medium">Save for WhatsApp</span>
                   </motion.button>
                 </div>
               </PopoverContent>

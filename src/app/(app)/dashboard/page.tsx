@@ -2,14 +2,13 @@
 
 import { MessageCard } from "@/components/MessageCard";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Message } from "@/models/User.model";
 import { ApiResponse } from "@/types/Apiresponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { Loader2, RefreshCcw } from "lucide-react";
+import { Loader2, RefreshCcw, Copy } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import React, { useCallback, useEffect, useState } from "react";
@@ -60,8 +59,8 @@ function UserDashboard() {
         setMessages(response.data.messages || []);
         console.log(response.data);
         if (refresh) {
-          toast.info("Refreshed Messages", {
-            description: "Showing latest messages",
+          toast.info("Messages Refreshed", {
+            description: "Your latest messages are now displayed",
           });
         }
       } catch (error) {
@@ -116,62 +115,79 @@ function UserDashboard() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
-    toast.info("URL Copied!", {
-      description: "Profile URL has been copied to clipboard.",
+    toast.success("Profile Link Copied!", {
+      description: "Your unique profile URL is now in your clipboard",
     });
   };
 
   return (
-    <div className="flex flex-col items-center min-w-full bg-[#5a5a5a] h-full min-h-screen">
-      <div className="my-8 mx-4  md:mx-8 lg:mx-auto p-6 rounded w-full max-w-6xl">
-        <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900">
+      <div className="container mx-auto py-12 px-4">
+        <div className="backdrop-blur-md bg-white/10 rounded-2xl shadow-xl p-8 mb-10">
+          <h1 className="text-4xl font-bold mb-6 text-white bg-gradient-to-r from-pink-500 to-indigo-600 bg-clip-text text-transparent">
+            Your Message Dashboard
+          </h1>
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{" "}
-          <div className="flex items-center">
-            <input
-              type="text"
-              value={profileUrl}
-              disabled
-              className="input input-bordered rounded-l-md w-full p-2 mr-2"
+          <div className="mb-8 bg-white/20 p-6 rounded-xl backdrop-blur-sm">
+            <h2 className="text-xl font-semibold mb-3 text-white">Share Your Profile Link</h2>
+            <div className="flex items-center">
+              <div className="flex-1 bg-white/30 border border-indigo-300 rounded-l-lg p-3 text-white overflow-hidden">
+                <p className="truncate">{profileUrl}</p>
+              </div>
+              <Button
+                className="rounded-l-none rounded-r-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2 px-4 py-3"
+                onClick={copyToClipboard}
+              >
+                <Copy size={18} />
+                <span>Copy</span>
+              </Button>
+            </div>
+            <p className="text-indigo-200 text-sm mt-2">
+              Share this link with friends to receive anonymous messages
+            </p>
+          </div>
+
+          <div className="mb-8 flex items-center gap-3 bg-white/20 p-5 rounded-xl backdrop-blur-sm">
+            <Switch
+              {...register("acceptMessages")}
+              checked={acceptMessages}
+              onCheckedChange={handleSwitchChange}
+              disabled={isSwitchLoading}
+              className="data-[state=checked]:bg-indigo-600"
             />
-            <Button
-              className="rounded-none rounded-r-md"
-              onClick={copyToClipboard}
-            >
-              Copy
-            </Button>
+            <div>
+              <span className="text-white font-medium ml-2">
+                Accept Messages: {acceptMessages ? "Enabled" : "Disabled"}
+              </span>
+              <p className="text-indigo-200 text-sm">
+                {acceptMessages 
+                  ? "You're currently receiving anonymous messages" 
+                  : "Turn on to start receiving anonymous messages"}
+              </p>
+            </div>
           </div>
         </div>
-
-        <div className="mb-4">
-          <Switch
-            {...register("acceptMessages")}
-            checked={acceptMessages}
-            onCheckedChange={handleSwitchChange}
-            disabled={isSwitchLoading}
-          />
-          <span className="ml-2">
-            Accept Messages: {acceptMessages ? "On" : "Off"}
-          </span>
+        
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-white">Your Messages</h2>
+          <Button
+            variant="outline"
+            onClick={(e) => {
+              e.preventDefault();
+              fetchMessages(true);
+            }}
+            className="bg-white/20 border-indigo-300 text-white hover:bg-white/30"
+          >
+            {isLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <RefreshCcw className="h-5 w-5" />
+            )}
+            <span className="ml-2">Refresh</span>
+          </Button>
         </div>
-        <Separator />
 
-        <Button
-          className="mt-4"
-          variant="outline"
-          onClick={(e) => {
-            e.preventDefault();
-            fetchMessages(true);
-          }}
-        >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <RefreshCcw className="h-4 w-4" />
-          )}
-        </Button>
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {messages.length > 0 ? (
             messages.map((message) => (
               <MessageCard
@@ -182,7 +198,10 @@ function UserDashboard() {
               />
             ))
           ) : (
-            <p>No messages to display.</p>
+            <div className="col-span-full text-center backdrop-blur-md bg-white/10 rounded-xl p-10">
+              <p className="text-white text-lg mb-2">Your message box is empty</p>
+              <p className="text-indigo-200">Share your profile link to start receiving anonymous messages</p>
+            </div>
           )}
         </div>
       </div>
