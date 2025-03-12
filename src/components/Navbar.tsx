@@ -101,6 +101,15 @@ const Navbar = () => {
                       {user?.username || user?.email}
                     </span>
                   </motion.div>
+                  <Link href="/dashboard">
+                    <Button 
+                      className="flex items-center space-x-1"
+                      style={{ backgroundColor: '#ff764b', color: 'white' }}
+                    >
+                      <MessageSquare className="h-4 w-4 mr-1" />
+                      Dashboard
+                    </Button>
+                  </Link>
                   
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button 
@@ -142,7 +151,7 @@ const Navbar = () => {
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8" style={{ color: '#ff764b' }}>
-                  {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                  {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
                 </Button>
               </SheetTrigger>
               <SheetContent style={{ backgroundColor: '#3a4a61', color: 'white' }}>
@@ -165,11 +174,15 @@ const Navbar = () => {
                         className="space-y-4"
                       >
                         <div className="menu-item flex items-center space-x-2 py-2">
-                          <UserIcon className="h-4 w-4" style={{ color: '#ff764b' }} />
-                          <span className="text-sm font-medium text-white">
+                          <UserIcon className="h-6 w-6" style={{ color: '#ff764b' }} />
+                          <span className="text-lg font-medium text-white">
                             {user.username || user.email}
                           </span>
                         </div>
+                        <Link href="/dashboard" className="menu-item flex items-center text-lg font-medium space-x-2 py-2" onClick={() => setIsOpen(false)}>
+                          <MessageSquare className="h-6 w-6 mr-2" style={{ color: '#ff764b' }} />
+                          Dashboard
+                        </Link>
                         <Button 
                           onClick={() => {
                             signOut();

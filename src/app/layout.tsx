@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from 'next/font/google';
 import "./globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "@/components/ui/sonner"
 
-const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
   title: "Know yourSelf!",
-  description: "A simple app to help you learn about you.",
+  description: "A simple app to help you to know more about you.",
 };
 
 export default function RootLayout({
@@ -20,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <AuthProvider>
         <body
-          className={`antialiased ${inter.className}`}
+          className={`antialiased`}
         >
           {children}
           <Toaster position="top-right" richColors />
