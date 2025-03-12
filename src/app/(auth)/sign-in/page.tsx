@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from "sonner"
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signInSchema } from '@/schemas/signInSchema';
 import { signIn } from 'next-auth/react';
@@ -65,7 +65,16 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
+    <div className="flex justify-center max-md:px-6 items-center min-h-screen bg-slate-800 relative">
+      <Button 
+        variant="ghost" 
+        className="absolute top-6 left-6 rounded-full text-white bg-gray-500 shadow-md shadow-black hover:bg-gray-700 hover:text-white flex items-center gap-2"
+        onClick={() => router.back()}
+      >
+        <ArrowLeft size={20} />
+        <span>Back</span>
+      </Button>
+      
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">

@@ -194,7 +194,7 @@ export default function SendMessage() {
                   <Button
                     key={index}
                     variant="outline"
-                    className="mb-2 bg-[#ffede0] border-b-2 border-[#5a5a5a]"
+                    className="mb-2 py-8 text-wrap text-center bg-[#ffede0] border-b-2 border-[#5a5a5a]"
                     onClick={() => handleMessageClick(message)}
                   >
                     {message}

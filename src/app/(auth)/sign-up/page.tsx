@@ -19,7 +19,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { toast } from "sonner"
 import axios, { AxiosError } from 'axios';
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signUpSchema } from '@/schemas/signUpSchema';
 
@@ -93,7 +93,16 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
+    <div className="flex justify-center max-md:px-6 items-center min-h-screen bg-gray-800 relative">
+      <Button 
+        variant="ghost" 
+        className="absolute top-6 left-6 rounded-full text-white bg-gray-500 shadow-md shadow-black hover:bg-gray-700 hover:text-white flex items-center gap-2"
+        onClick={() => router.back()}
+      >
+        <ArrowLeft size={20} />
+        <span>Back</span>
+      </Button>
+      
       <div className="w-full max-w-md p-8 mt-6 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
