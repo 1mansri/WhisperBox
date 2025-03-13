@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import dayjs from "dayjs";
+import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
@@ -14,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Instagram, Trash2, Share2, MedalIcon } from "lucide-react";
+import { Instagram, Trash2, Share2, WhatsApp } from "lucide-react";
 import { Message } from "@/models/User.model";
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
@@ -122,7 +123,9 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
       const response = await axios.delete<ApiResponse>(
         `/api/delete-message/${message._id}`
       );
-      toast.info(response.data.message);
+      toast.info(response.data.message, {
+        icon: <Trash2 className="h-4 w-4" />,
+      });
       onMessageDelete(message._id);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
@@ -182,7 +185,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
       
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="message-text text-lg font-bold text-indigo-400 dark:text-indigo-200">
+          <CardTitle className="message-text text-lg font-bold text-indigo-900 dark:text-indigo-200">
             {message.content}
           </CardTitle>
           <AlertDialog>
@@ -217,7 +220,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <div className="text-sm text-purple-400 dark:text-purple-300 mt-1 font-medium">
+        <div className="text-sm text-purple-700 dark:text-purple-300 mt-1 font-medium">
           {dayjs(message.createdAt).format("MMM D, YYYY • h:mm A")}
         </div>
       </CardHeader>
@@ -257,7 +260,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
                     onClick={() => shareAsImage('whatsapp')}
                     className="flex items-center gap-2 p-2 hover:bg-purple-100 dark:hover:bg-purple-900/40 rounded-md cursor-pointer transition-colors duration-200"
                   >
-                    <MedalIcon className="h-4 w-4 text-green-600" />
+                    <WhatsApp className="h-4 w-4 text-green-600" />
                     <span className="text-sm font-medium">Save for WhatsApp</span>
                   </motion.button>
                 </div>
