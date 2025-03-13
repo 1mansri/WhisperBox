@@ -179,12 +179,12 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
       className="bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 backdrop-blur-lg rounded-xl p-6 shadow-xl border border-indigo-500/30 relative group overflow-hidden"
     >
       {/* Decorative elements */}
-      <div className="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-xl"></div>
+      {/* <div className="absolute -right-10 -top-10 w-40 h-40 bg-purple-500/10 rounded-full blur-xl"></div>
       <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-xl"></div>
-      
+       */}
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="message-text text-lg font-bold text-indigo-900 dark:text-indigo-200">
+          <CardTitle className="message-text text-lg font-bold text-indigo-500 dark:text-indigo-200">
             {message.content}
           </CardTitle>
           <AlertDialog>
@@ -219,7 +219,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        <div className="text-sm text-purple-700 dark:text-purple-300 mt-1 font-medium">
+        <div className="text-sm text-purple-400 dark:text-purple-300 mt-1 font-medium">
           {dayjs(message.createdAt).format("MMM D, YYYY • h:mm A")}
         </div>
       </CardHeader>
