@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Instagram, Trash2, Share2, WhatsApp } from "lucide-react";
+import { Instagram, Trash2, Share2, MessageCircleMore } from "lucide-react";
 import { Message } from "@/models/User.model";
 import { toast } from "sonner";
 import axios, { AxiosError } from "axios";
@@ -260,7 +260,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
                     onClick={() => shareAsImage('whatsapp')}
                     className="flex items-center gap-2 p-2 hover:bg-purple-100 dark:hover:bg-purple-900/40 rounded-md cursor-pointer transition-colors duration-200"
                   >
-                    <WhatsApp className="h-4 w-4 text-green-600" />
+                    <MessageCircleMore className="h-4 w-4 text-green-600" />
                     <span className="text-sm font-medium">Save for WhatsApp</span>
                   </motion.button>
                 </div>
