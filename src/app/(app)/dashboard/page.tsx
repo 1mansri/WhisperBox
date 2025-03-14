@@ -131,11 +131,11 @@ function UserDashboard() {
           <div className="mb-8 bg-white/20 p-6 rounded-xl backdrop-blur-sm">
             <h2 className="text-xl font-semibold mb-3 text-white">Share Your Profile Link</h2>
             <div className="flex items-center">
-              <div className="flex-1 bg-white/30 border border-indigo-300 rounded-l-lg p-3 text-white overflow-hidden">
+              <div className="flex-1 bg-white/30 border border-indigo-300 rounded-l-lg p-3 h-12 text-white overflow-hidden">
                 <p className="truncate">{profileUrl}</p>
               </div>
               <Button
-                className="rounded-l-none rounded-r-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2 px-4 py-3"
+                className="rounded-l-none rounded-r-lg bg-indigo-600 hover:bg-indigo-700 text-white h-12 flex items-center gap-2 px-4 py-3"
                 onClick={copyToClipboard}
               >
                 <Copy size={18} />

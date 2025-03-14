@@ -1,146 +1,182 @@
-'use client'
-import React, { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
-import { User } from 'next-auth'
-import { Button } from './ui/button'
-import { motion, AnimatePresence } from 'framer-motion'
-import { gsap } from 'gsap'
-import { 
-  Menu, 
-  X, 
-  LogOut, 
-  LogIn, 
-  MessageSquare, 
+"use client";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { User } from "next-auth";
+import { Button } from "./ui/button";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Menu,
+  X,
+  LogOut,
+  LogIn,
+  MessageSquare,
   User as UserIcon,
-  Sparkles
-} from 'lucide-react'
+  Home,
+  Sparkles,
+} from "lucide-react";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetHeader,
-  SheetTitle
-} from '@/components/ui/sheet'
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 const Navbar = () => {
-  const { data: session } = useSession()
-  const user = session?.user as User
-  const [isOpen, setIsOpen] = useState(false)
-  const logoRef = useRef(null)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const { data: session } = useSession();
+  const user = session?.user as User;
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // GSAP animation for the logo on mount
+  // Handle scroll effect
   useEffect(() => {
-    gsap.from(logoRef.current, {
-      opacity: 0,
-      y: -20,
-      duration: 0.8,
-      ease: "power3.out"
-    })
-  }, [])
-
-  // Handle menu animation with GSAP
-  useEffect(() => {
-    if (isOpen && menuRef.current) {
-      gsap.fromTo(menuRef.current.querySelectorAll('.menu-item'), 
-        { opacity: 0, y: 20 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          stagger: 0.1, 
-          duration: 0.4,
-          ease: "power2.out"
-        }
-      )
-    }
-  }, [isOpen])
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <motion.nav 
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 border-b py-3 backdrop-blur-md"
-      style={{ 
-        backgroundColor: 'rgba(67, 56, 202, 0.85)', 
-        borderBottomColor: 'rgba(255,255,255,0.1)' 
-      }}
+    <motion.nav
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className={`sticky top-0 z-50 py-4 transition-all ease-in-out scroll-smooth duration-300 ${
+        scrolled
+          ? "bg-black/40 backdrop-blur-xl shadow-lg"
+          : "bg-gradient-to-l from-pink-800 via-purple-700 to-indigo-800 "
+      }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" passHref>
-            <motion.div 
-              ref={logoRef}
-              className="flex items-center space-x-2 font-bold text-xl"
-              style={{ color: '#f471b5' }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <motion.div
+              className="flex items-center space-x-2 font-bold"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
-              <Sparkles className="h-6 w-6" style={{ color: '#f471b5' }} />
-              <span className="hidden sm:inline">WhisperBox</span>
+              <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-2 rounded-lg shadow-lg">
+                <Sparkles className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent font-extrabold tracking-tight hidden sm:inline">
+                WhisperBox
+              </span>
             </motion.div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex flex-row justify-between items-center space-x-2">
+            {/* <Link href="/" className="relative group">
+              <Button
+                variant="ghost"
+                className="text-white/80 hover:text-white"
+              >
+                <Home className="h-4 w-4 mr-1" />
+                Home
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-500 group-hover:w-full transition-all duration-300"></span>
+              </Button>
+            </Link> */}
+            <div className="flex flex-row justify-center space-x-2 items-center">
+              <div className="bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/10">
+                <Link href="/">
+                  <div className="flex items-center space-x-2">
+                    <div className="bg-gradient-to-tl from-pink-500 to-purple-500 p-1 rounded-full">
+                      <Home className="h-3 w-3 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-white">Home</span>
+                  </div>
+                </Link>
+              </div>
+
+              {session && (
+                <div className="flex flex-row justify-around items-center gap-4">
+                  <div className="bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/10">
+                    <div className="flex items-center space-x-2">
+                      <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-1 rounded-full">
+                        <UserIcon className="h-3 w-3 text-white" />
+                      </div>
+                      <span className="text-sm font-medium text-white">
+                        {user?.username || user?.email?.split("@")[0]}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/10">
+                    <Link href="/dashboard">
+                      <div className="flex items-center space-x-2">
+                        <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-1 rounded-full">
+                          <MessageSquare className="h-3 w-3 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-white">
+                          Messages
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
             <AnimatePresence mode="wait">
               {session ? (
-                <motion.div 
+                <motion.div
                   key="logged-in"
-                  className="flex items-center space-x-4"
+                  className="flex items-center space-x-2"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <motion.div 
-                    className="flex items-center space-x-2 rounded-full px-4 py-2"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
-                    whileHover={{ backgroundColor: "rgba(255,255,255,0.25)" }}
+                  {/* <div className="bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/10">
+                    <div className="flex items-center space-x-2">
+                      <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-1 rounded-full">
+                        <UserIcon className="h-3 w-3 text-white" />
+                      </div>
+                      <span className="text-sm font-medium text-white">
+                        {user?.username || user?.email?.split("@")[0]}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white/10 backdrop-blur-md rounded-full px-3 py-1.5 border border-white/10">
+                    <Link href="/dashboard">
+                      <div className="flex items-center space-x-2">
+                        <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-1 rounded-full">
+                          <MessageSquare className="h-3 w-3 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-white">
+                          Messages
+                        </span>
+                      </div>
+                    </Link>
+                  </div> */}
+
+                  <Button
+                    onClick={() => signOut()}
+                    className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white rounded-full border border-white/10"
+                    variant="ghost"
                   >
-                    <UserIcon className="h-4 w-4" style={{ color: '#f471b5' }} />
-                    <span className="text-sm font-medium text-white">
-                      {user?.username || user?.email}
-                    </span>
-                  </motion.div>
-                  <Link href="/dashboard">
-                    <Button 
-                      className="flex items-center space-x-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md"
-                    >
-                      <MessageSquare className="h-4 w-4 mr-1" />
-                      Messages
-                    </Button>
-                  </Link>
-                  
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button 
-                      onClick={() => signOut()}
-                      className="flex items-center space-x-1 bg-pink-500 hover:bg-pink-600 shadow-md"
-                      variant="outline"
-                      style={{ borderColor: 'rgba(255,255,255,0.2)' }}
-                    >
-                      <LogOut className="h-4 w-4 mr-1" />
-                      Sign out
-                    </Button>
-                  </motion.div>
+                    <LogOut className="h-4 w-4 mr-1.5" />
+                    Sign out
+                  </Button>
                 </motion.div>
               ) : (
-                <motion.div 
+                <motion.div
                   key="logged-out"
-                  whileHover={{ scale: 1.05 }} 
-                  whileTap={{ scale: 0.95 }}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
                 >
                   <Link href="/sign-in">
-                    <Button 
-                      className="flex items-center space-x-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md"
+                    <Button
+                      className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white rounded-full border border-white/10"
+                      variant="ghost"
                     >
-                      <LogIn className="h-4 w-4 mr-1" />
+                      <LogIn className="h-4 w-4 mr-1.5" />
                       Sign in
                     </Button>
                   </Link>
@@ -153,70 +189,134 @@ const Navbar = () => {
           <div className="md:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-white">
-                  {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="text-white h-9 w-9 rounded-full bg-white/10 border border-white/10 backdrop-blur-md"
+                >
+                  {isOpen ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Menu className="h-5 w-5" />
+                  )}
                 </Button>
               </SheetTrigger>
-              <SheetContent className="backdrop-blur-xl bg-gradient-to-br from-indigo-900/90 to-purple-900/90 border-l border-white/10 text-white">
-                <SheetHeader>
-                  <SheetTitle className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-400">
-                    WhisperBox Menu
+              <SheetContent className="bg-gradient-to-br from-indigo-900/95 to-purple-900/95 backdrop-blur-xl border-l border-white/10 p-0">
+                <div className="flex flex-col h-full">
+                  <SheetTitle className="flex items-center justify-between p-6 border-b border-white/10">
+                    <div className="flex items-center space-x-3">
+                      <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-2 rounded-lg shadow-lg">
+                        <Sparkles className="h-5 w-5 text-white" />
+                      </div>
+                      <span className="text-xl bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent font-extrabold tracking-tight">
+                        WhisperBox
+                      </span>
+                    </div>
+                    {/* <Button size="icon" variant="ghost" className="text-white h-8 w-8 rounded-full" onClick={() => setIsOpen(false)}>
+                      <X className="h-5 w-5" />
+                    </Button> */}
                   </SheetTitle>
-                </SheetHeader>
-                <div ref={menuRef} className="flex flex-col space-y-4 mt-4">
-                  <Link href="/" className="menu-item flex items-center space-x-2 font-bold text-xl py-2" style={{ color: '#f471b5' }} onClick={() => setIsOpen(false)}>
-                    <Sparkles className="h-6 w-6" />
-                    <span>WhisperBox</span>
-                  </Link>
-                  
-                  <AnimatePresence mode="wait">
-                    {session ? (
-                      <motion.div
-                        key="mobile-logged-in"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="space-y-4"
+
+                  <div className="flex flex-col p-6 space-y-4 flex-grow">
+                    <Link href="/" onClick={() => setIsOpen(false)}>
+                      <Button
+                        variant="ghost"
+                        className="text-white h-12 px-2 text-xl w-full flex gap-3 justify-start hover:bg-white/10 rounded-lg"
+                        size="lg"
                       >
-                        <div className="menu-item flex items-center space-x-2 py-2 px-3 rounded-lg bg-white/10">
-                          <UserIcon className="h-5 w-5" style={{ color: '#f471b5' }} />
-                          <span className="text-lg font-medium text-white">
-                            {user.username || user.email}
-                          </span>
-                        </div>
-                        <Link href="/dashboard" className="menu-item flex items-center text-lg font-medium space-x-2 py-2 px-3 rounded-lg hover:bg-white/10" onClick={() => setIsOpen(false)}>
-                          <MessageSquare className="h-5 w-5 mr-2" style={{ color: '#f471b5' }} />
-                          Messages
-                        </Link>
-                        <Button 
-                          onClick={() => {
-                            signOut();
-                            setIsOpen(false);
-                          }}
-                          className="menu-item flex items-center justify-center space-x-1 w-full bg-pink-500 hover:bg-pink-600 shadow-md"
+                        <Home size={40} />
+                        Home
+                      </Button>
+                    </Link>
+
+                    <AnimatePresence mode="wait">
+                      {session ? (
+                        <motion.div
+                          key="mobile-logged-in"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="space-y-4"
                         >
-                          <LogOut className="h-4 w-4 mr-1" />
-                          Sign out
-                        </Button>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="mobile-logged-out"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                      >
-                        <Link href="/sign-in" className="w-full" onClick={() => setIsOpen(false)}>
-                          <Button 
-                            className="menu-item flex items-center justify-center space-x-1 w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 shadow-md"
+                          <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 border border-white/10">
+                            <div className="flex items-center space-x-3">
+                              <div className="bg-gradient-to-br from-pink-500 to-purple-500 p-2 rounded-full">
+                                <UserIcon className="h-4 w-4 text-white" />
+                              </div>
+                              <div>
+                                <span className="text-sm text-white/60">
+                                  Signed in as
+                                </span>
+                                <p className="text-white font-medium">
+                                  {user?.username || user?.email}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setIsOpen(false)}
+                            className="block"
                           >
-                            <LogIn className="h-4 w-4 mr-1" />
-                            Sign in
-                          </Button>
-                        </Link>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                            <Button
+                              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-lg w-full shadow-md shadow-purple-500/20 border border-white/10"
+                              size="lg"
+                            >
+                              <MessageSquare className="h-5 w-5 mr-2" />
+                              View Messages
+                            </Button>
+                          </Link>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="mobile-logged-out"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="space-y-4"
+                        >
+                          <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 border border-white/10">
+                            <p className="text-white">
+                              Experience secure, private messaging with
+                              WhisperBox
+                            </p>
+                          </div>
+
+                          <Link
+                            href="/sign-in"
+                            onClick={() => setIsOpen(false)}
+                            className="block"
+                          >
+                            <Button
+                              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-lg w-full shadow-md shadow-purple-500/20 border border-white/10"
+                              size="lg"
+                            >
+                              <LogIn className="h-5 w-5 mr-2" />
+                              Sign in
+                            </Button>
+                          </Link>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {session && (
+                    <div className="p-6 border-t border-white/10">
+                      <Button
+                        onClick={() => {
+                          signOut();
+                          setIsOpen(false);
+                        }}
+                        className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white rounded-lg w-full border border-white/10"
+                        variant="ghost"
+                        size="lg"
+                      >
+                        <LogOut className="h-5 w-5 mr-2" />
+                        Sign out
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -224,7 +324,7 @@ const Navbar = () => {
         </div>
       </div>
     </motion.nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

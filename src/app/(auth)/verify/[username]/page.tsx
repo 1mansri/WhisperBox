@@ -88,7 +88,7 @@ export default function VerifyAccount() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-4">
+    <div className="flex justify-center max-md:px-6 items-center min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-4">
       <motion.div
         initial="hidden"
         animate="visible"

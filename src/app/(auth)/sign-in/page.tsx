@@ -64,7 +64,7 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 relative">
+    <div className="flex justify-center max-md:px-6 items-center min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 relative">
       <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.svg')] opacity-5"></div>
       
       <Button 
