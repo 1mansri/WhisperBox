@@ -120,8 +120,6 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <p className="mb-2">© 2025 WhisperBox. All rights reserved.</p>
           <div className="flex justify-center space-x-6 mt-4">
-            <a href="#" className="text-indigo-300 hover:text-pink-300 transition-colors">Privacy</a>
-            <a href="#" className="text-indigo-300 hover:text-pink-300 transition-colors">Terms</a>
             <a target='_blank' href="https://durgeshtechportfolio.netlify.app/" className="text-indigo-300 hover:text-pink-300 transition-colors">Contact</a>
           </div>
         </div>
