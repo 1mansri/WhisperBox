@@ -83,7 +83,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
       brandingDiv.style.fontSize = "14px";
       brandingDiv.style.fontFamily = "system-ui, -apple-system, sans-serif";
       brandingDiv.style.textAlign = "center";
-      brandingDiv.textContent = "✨ shared via Mystery Messages ✨";
+      brandingDiv.textContent = "✨ shared via WhisperBox ✨";
       wrapper.appendChild(brandingDiv);
 
       // Temporarily append to body for html2canvas
@@ -101,7 +101,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
 
       const image = canvas.toDataURL("image/png", 1.0);
       const link = document.createElement("a");
-      link.download = `mystery-message-${message._id}.png`;
+      link.download = `WhisperBox-${message._id}.png`;
       link.href = image;
       link.click();
 
@@ -187,7 +187,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
           <CardTitle className="message-text text-lg font-bold text-indigo-500 dark:text-indigo-200">
             {message.content}
           </CardTitle>
-          <AlertDialog>
+          <AlertDialog  >
             <AlertDialogTrigger asChild>
               <motion.button
                 variants={buttonVariants}
@@ -198,7 +198,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
                 <Trash2 className="w-4 h-4" />
               </motion.button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white border border-indigo-500/50">
+            <AlertDialogContent className="bg-gradient-to-br backdrop-blur-3xl from-slate-900 to-indigo-950 text-white border max-md:max-w-[90%] rounded-lg border-indigo-500/50">
               <AlertDialogHeader>
                 <AlertDialogTitle className="text-rose-300">Are you sure you want to delete?</AlertDialogTitle>
                 <AlertDialogDescription className="text-slate-300">
@@ -217,6 +217,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
+            
           </AlertDialog>
         </div>
         <div className="text-sm text-purple-400 dark:text-purple-300 mt-1 font-medium">
@@ -239,7 +240,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
                   <span>Share</span>
                 </motion.button>
               </PopoverTrigger>
-              <PopoverContent className="w-56 p-3 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border border-indigo-300 dark:border-indigo-800 shadow-xl">
+              <PopoverContent className="w-56 ml-8 mt-2 p-3 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border border-indigo-300 dark:border-indigo-800 shadow-xl">
                 <div className="flex flex-col gap-2">
                   <motion.button
                     variants={buttonVariants}

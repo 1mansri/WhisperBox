@@ -64,19 +64,19 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="flex justify-center max-md:px-6 items-center min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 relative">
+    <div className="flex justify-center max-md:px-6 py-8 items-center min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-pink-900 relative">
       <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.svg')] opacity-5"></div>
       
       <Button 
         variant="ghost" 
-        className="absolute top-6 left-6 rounded-full text-white bg-white/10 backdrop-blur-md shadow-xl hover:bg-white/20 hover:text-white flex items-center gap-2"
+        className="absolute z-50 top-6 left-6 rounded-full text-white bg-white/10 backdrop-blur-md shadow-xl hover:bg-white/20 hover:text-white flex items-center gap-2"
         onClick={() => router.back()}
       >
         <ArrowLeft size={18} />
         <span>Back</span>
       </Button>
       
-      <div className="w-full max-w-md p-8 space-y-8 backdrop-blur-md bg-white/10 rounded-2xl shadow-2xl border border-white/20 relative z-10">
+      <div className="w-full max-w-md mt-10 p-8 space-y-8 backdrop-blur-md bg-white/10 rounded-2xl shadow-2xl border border-white/20 relative z-10">
         <div className="text-center">
           <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-indigo-600 rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
             <span className="text-white text-3xl font-bold">WB</span>
