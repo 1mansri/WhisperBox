@@ -218,13 +218,16 @@ const Navbar = () => {
                   </SheetTitle>
 
                   <div className="flex flex-col p-6 space-y-4 flex-grow">
-                    <Link href="/" onClick={() => setIsOpen(false)}>
+                    <Link
+                      href="/"
+                      className="block"
+                      onClick={() => setIsOpen(false)}
+                    >
                       <Button
-                        variant="ghost"
-                        className="text-white h-12 px-2 text-xl w-full flex gap-3 justify-start hover:bg-white/10 rounded-lg"
+                        className="bg-white/10 w-full backdrop-blur-md hover:bg-white/20 text-white rounded-full border border-white/10"
                         size="lg"
                       >
-                        <Home size={40} />
+                        <Home className="h-5 w-5 mr-2" />
                         Home
                       </Button>
                     </Link>
@@ -260,7 +263,7 @@ const Navbar = () => {
                             className="block"
                           >
                             <Button
-                              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-lg w-full shadow-md shadow-purple-500/20 border border-white/10"
+                              className="bg-white/10 w-full backdrop-blur-md hover:bg-white/20 text-white rounded-full border border-white/10"
                               size="lg"
                             >
                               <MessageSquare className="h-5 w-5 mr-2" />
@@ -289,10 +292,10 @@ const Navbar = () => {
                             className="block"
                           >
                             <Button
-                              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-lg w-full shadow-md shadow-purple-500/20 border border-white/10"
-                              size="lg"
+                              className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white rounded-full border border-white/10"
+                              variant="ghost"
                             >
-                              <LogIn className="h-5 w-5 mr-2" />
+                              <LogIn className="h-4 w-4 mr-2" />
                               Sign in
                             </Button>
                           </Link>
