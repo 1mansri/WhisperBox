@@ -62,7 +62,7 @@ The project leverages Next.js for server-side rendering, Tailwind CSS for stylin
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/whisperbox.git
+   git clone https://github.com/1mansri/WhisperBox
    cd 1mansri-whisperbox
 
 2. Install Dependencies
@@ -124,12 +124,6 @@ View incoming anonymous feedback in real time.
 4. Manage Feedback
 
 Use dashboard features to mark, archive, or delete feedback messages.
-
-
-
-
-
----
 
 
 ---
