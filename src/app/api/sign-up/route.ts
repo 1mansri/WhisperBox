@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     return Response.json(
         { 
             success: true, 
-            message: "User Registered successfully, please VErify your account" 
+            message: "User Registered successfully, please Verify your account" 
         },
         { 
             status: 201 

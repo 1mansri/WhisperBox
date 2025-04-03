@@ -15,6 +15,7 @@ import { ApiResponse } from '@/types/Apiresponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { verifySchema } from '@/schemas/verifySchema';
@@ -24,7 +25,7 @@ import {
     InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { motion } from "framer-motion";
-import { CheckCircle, Mail, KeyRound } from "lucide-react";
+import { CheckCircle, KeyRound, ArrowLeft, ShieldCheck } from "lucide-react";
 
 export default function VerifyAccount() {
   const router = useRouter();
@@ -54,6 +55,10 @@ export default function VerifyAccount() {
           'The code you entered is incorrect or has expired. Please try again.',
       });
     }
+  };
+
+  const goBack = () => {
+    router.back();
   };
 
   // Container animation variants
@@ -88,25 +93,37 @@ export default function VerifyAccount() {
   };
 
   return (
-    <div className="flex justify-center max-md:px-6 items-center min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-4">
+    <div className="flex justify-center md:py-8 max-md:px-6 items-center min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-4">
       <motion.div
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        className="w-full max-w-md p-8 space-y-8 bg-white/10 backdrop-blur-xl border border-indigo-500/30 shadow-2xl rounded-2xl relative overflow-hidden"
+        className="w-full max-w-md p-8 space-y-6 bg-white/10 backdrop-blur-xl border border-indigo-500/30 shadow-2xl rounded-2xl relative overflow-hidden"
       >
+        {/* Back button */}
+        <motion.button
+          variants={itemVariants}
+          onClick={goBack}
+          className="absolute bg-gray-700/60 hover:bg-gray-600/70 active:shadow-md active:shadow-gray-900 rounded-full px-4 py-2  top-6 left-6 text-indigo-200 hover:text-white transition-colors duration-200 flex items-center gap-1 z-20"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-sm font-medium">Back</span>
+        </motion.button>
+        
         {/* Decorative elements */}
         <div className="absolute -right-20 -top-20 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl"></div>
         <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl"></div>
         
-        <motion.div variants={itemVariants} className="text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-            <Mail className="w-8 h-8 text-white" />
+        <motion.div variants={itemVariants} className="text-center mt-6">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+            <ShieldCheck className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-pink-300">
+          <h1 className="text-3xl font-bold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-pink-300">
             Verify Your Account
           </h1>
-          <p className="mb-4 text-indigo-100">Check your inbox for the verification code we&apos;ve sent</p>
+          <p className="mb-2 text-indigo-100 max-w-xs mx-auto">
+            We&apos;ve sent a 6-digit verification code to your email address
+          </p>
         </motion.div>
         
         <Form {...form}>
@@ -117,12 +134,13 @@ export default function VerifyAccount() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="space-y-4">
-                    <FormLabel className="text-indigo-100 text-center block text-lg">Enter 6-Digit Code</FormLabel>
+                    <FormLabel className="text-indigo-100 text-center block text-lg font-medium">Enter Code</FormLabel>
                     <FormControl>
                       <InputOTP maxLength={6} {...field}>
-                        <InputOTPGroup className="gap-2 sm:gap-4 justify-center">
+                        <InputOTPGroup className="gap-2 sm:gap-3 flex justify-center">
                           {[0, 1, 2, 3, 4, 5].map((index) => (
                             <motion.div
+                              className="flex items-center justify-center"
                               key={index}
                               initial="initial"
                               animate="animate"
@@ -132,14 +150,14 @@ export default function VerifyAccount() {
                             >
                               <InputOTPSlot 
                                 index={index} 
-                                className="w-10 h-14 sm:w-12 sm:h-16 bg-white/20 backdrop-blur-sm border-indigo-400/50 hover:border-indigo-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 text-white text-xl rounded-lg" 
+                                className="w-10 h-12 sm:w-12 sm:h-14 bg-white/20 backdrop-blur-sm border-2 border-indigo-400/50 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/50 text-white text-xl rounded-lg" 
                               />
                             </motion.div>
                           ))}
                         </InputOTPGroup>
                       </InputOTP>
                     </FormControl>
-                    <FormDescription className="text-center text-indigo-200/80">
+                    <FormDescription className="text-center text-indigo-200/80 text-sm">
                       Didn&apos;t receive the code? Check your spam folder
                     </FormDescription>
                     <FormMessage className="text-pink-300" />
@@ -152,7 +170,7 @@ export default function VerifyAccount() {
               <div className="flex justify-center pt-2">
                 <Button 
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-6 bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-medium rounded-xl shadow-lg shadow-indigo-700/30 hover:shadow-indigo-700/50 transition-all duration-300 text-lg flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-medium rounded-xl shadow-lg shadow-indigo-700/30 hover:shadow-indigo-700/50 transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   <KeyRound className="w-5 h-5" />
                   <span>Verify Account</span>
@@ -160,15 +178,11 @@ export default function VerifyAccount() {
               </div>
             </motion.div>
             
-            {/* <motion.div variants={itemVariants} className="text-center">
-              <button
-                type="button"
-                className="text-indigo-300 hover:text-indigo-100 text-sm flex items-center gap-1 mx-auto transition-colors duration-200"
-              >
-                <RefreshCw className="w-3 h-3" />
-                <span>Resend verification code</span>
-              </button>
-            </motion.div> */}
+            <motion.div variants={itemVariants} className="pt-2">
+              <div className="text-center text-indigo-300 ">
+                  Need help? <Link href="/" className="text-indigo-300 hover:text-indigo-100 font-medium">Contact Support</Link>
+              </div>
+            </motion.div>
           </form>
         </Form>
       </motion.div>
