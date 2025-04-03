@@ -3,12 +3,13 @@ import VerificationEmail
 from "../../emails/VerificationEmail";
 import { ApiResponse } from "@/types/Apiresponse";
 import nodemailer from 'nodemailer';
-import { render } from '@react-email/components';
+// import { render } from '@react-email/components';
 
 export async function sendVerificationEmail(
     email:string,
     username: string,
-    verifyCode: string
+    verifyCode: string,
+    verificationLink?: string
 ): Promise<ApiResponse> {
     try {
         // await resend.emails.send({
@@ -17,8 +18,9 @@ export async function sendVerificationEmail(
         //     subject: 'Verify Code',
         //     react: VerificationEmail({username, otp: verifyCode}),
         //   });
+        verificationLink = `${process.env.DOMAIN}/verify/${username}` || `https://whisper-box-git-main-1mansris-projects.vercel.app/verify/${username}`;
 
-        const emailHtml = await render(VerificationEmail({username, otp: verifyCode}));
+        const emailHtml = (VerificationEmail({username, verificationLink, otp: verifyCode}));
         
         const mailOptions = {
             from: `"${sender.name}" <${sender.email}>`,
