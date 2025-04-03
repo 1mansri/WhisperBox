@@ -53,7 +53,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sender = {
-  name: "IncognitoBox",
+  name: "WhisperBox",
   email: process.env.EMAIL_USER as string
 };
 
