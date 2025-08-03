@@ -32,9 +32,9 @@ export async function GET() {
             return Response.json(
                 {
                     success: false,
-                    message: "User not found",
+                    message: "Your Whisper Box is empty",
                 },
-                { status: 404 }
+                { status: 201 }
             )
         }
         
