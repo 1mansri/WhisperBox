@@ -1,6 +1,6 @@
 # WhisperBox
 
-WhisperBox is a Next.js-based web application that lets you create a personal public link to collect anonymous feedback. Whether you need honest opinions on your work or just want to have fun receiving feedback, WhisperBox offers a secure and streamlined platform to do just that.
+WhisperBox is a Next.js web application that lets users create a personal public link to collect anonymous feedback. It is designed for honest responses, quick sharing, and simple message management from a secure dashboard.
 
 ---
 
@@ -9,155 +9,200 @@ WhisperBox is a Next.js-based web application that lets you create a personal pu
 - [Overview](#overview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Installation](#installation)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Running the App](#running-the-app)
 - [Usage](#usage)
 - [Contributing](#contributing)
+- [License](#license)
 
 ---
 
 ## Overview
 
-WhisperBox empowers users to:
-- Generate a unique public URL.
-- Share that link to receive anonymous feedback.
-- Manage and review all submitted feedback through a user dashboard.
-- Enjoy a secure and privacy-focused environment powered by modern web technologies.
+With WhisperBox, you can:
 
-The project leverages Next.js for server-side rendering, Tailwind CSS for styling, and TypeScript for type safety. It also integrates authentication (using NextAuth), email verification, and schema-based validation for robust functionality.
+- Generate your own public feedback URL.
+- Share it anywhere to receive anonymous messages.
+- View and manage all received messages in one dashboard.
+
+The project is built using Next.js (App Router), TypeScript, Tailwind CSS, and MongoDB, with authentication handled through NextAuth.
 
 ---
 
 ## Features
 
-- **Anonymous Feedback**: Collect untraceable opinions and messages.
-- **Personalized Public Link**: Create and share your unique feedback link.
-- **User Dashboard**: View, archive, or delete received feedback.
-- **Authentication & Verification**: Secure sign-in/sign-up flows with email verification.
-- **Modern UI Components**: Built with reusable components and a responsive design using Tailwind CSS.
-- **API-Driven**: Modular API routes for handling messages, user authentication, and more.
+- **Anonymous Feedback Collection**
+  - Receive untraceable, anonymous messages via a public link.
+
+- **Personal Feedback Link**
+  - Every user gets a unique public URL to share.
+
+- **Dashboard for Message Management**
+  - View incoming messages and manage them from a centralized interface.
+
+- **Authentication & Account Security**
+  - Sign up/sign in flow with NextAuth.
+  - Email verification support.
+
+- **Modern UI**
+  - Responsive and reusable component-based interface with Tailwind CSS.
+
+- **API-Driven Architecture**
+  - Modular API routes for auth, messages, and user operations.
 
 ---
 
 ## Tech Stack
 
-- **Framework:** Next.js (with App Router)
+- **Framework:** Next.js (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS, PostCSS
 - **Authentication:** NextAuth
-- **Database Integration:** (we integrate MongoDb as our database and Configured it via `lib/dbConnect.ts` – adjust as needed)
-- **Validation:** Zod or similar (see schemas folder for details)
-- **Email Handling:** Custom email components for verification
+- **Database:** MongoDB
+- **Validation:** Zod (schema-based validation)
+- **Email:** Custom email templates/components for verification flows
 
 ---
 
-## Installation
+## Project Structure
+
+A high-level structure may look like:
+
+```text
+.
+├── app/                  # App Router pages and routes
+├── components/           # Reusable UI components
+├── lib/                  # Utilities (e.g., dbConnect)
+├── models/               # Database models
+├── schemas/              # Zod validation schemas
+├── public/               # Static assets
+└── ...
+```
+
+> Adjust this structure section if your repository differs.
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
-- **Node.js** (v14 or later)
-- **npm** or **yarn**
+- **Node.js** 18+ (recommended)
+- **npm** (or **yarn** / **pnpm**)
+- A running **MongoDB** instance
 
-### Steps
+### 1) Clone the repository
 
-1. **Clone the Repository**
+```bash
+git clone https://github.com/1mansri/WhisperBox.git
+cd WhisperBox
+```
+
+### 2) Install dependencies
+
+Using npm:
+
+```bash
+npm install
+```
+
+Using yarn:
+
+```bash
+yarn install
+```
+
+---
+
+## Environment Variables
+
+Create a `.env` file (or copy from `.env.sample` if present):
+
+```bash
+cp .env.sample .env
+```
+
+Update required values, such as:
+
+- `MONGODB_URI`
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL`
+- Email provider credentials (for verification emails)
+
+> Ensure `.env` is **not** committed to version control.
+
+---
+
+## Running the App
+
+Start the development server:
+
+Using npm:
+
+```bash
+npm run dev
+```
+
+Using yarn:
+
+```bash
+yarn dev
+```
+
+Open: [http://localhost:3000](http://localhost:3000)
+
+---
+
+## Usage
+
+1. **Sign Up / Sign In**  
+   Visit auth routes to create or access your account.
+
+2. **Create Your Public Link**  
+   After login, generate your personal feedback URL from the dashboard.
+
+3. **Share & Collect Messages**  
+   Share your link publicly to receive anonymous feedback.
+
+4. **Manage Feedback**  
+   Review and organize messages from your dashboard.
+
+---
+
+## Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch:
 
    ```bash
-   git clone https://github.com/1mansri/WhisperBox
-   cd 1mansri-whisperbox
+   git checkout -b feature/your-feature-name
+   ```
 
-2. Install Dependencies
+3. Commit your changes:
 
-Using npm:
+   ```bash
+   git commit -m "feat: add your feature"
+   ```
 
-npm install
+4. Push to your branch:
 
-or using yarn:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
 
-yarn install
-
-
-3. Environment Variables
-
-Rename .env.sample to .env and update the configuration with your environment-specific variables (e.g., database URL, email server credentials, NextAuth secrets).
-
-
-
-4. Run the Development Server
-
-Using npm:
-
-npm run dev
-
-or using yarn:
-
-yarn dev
-
-The application should now be running at http://localhost:3000.
-
-
-
+5. Open a Pull Request with a clear description
 
 ---
 
-Usage
+## License
 
-1. Sign Up / Sign In
-
-Access the authentication routes under /auth/sign-up or /auth/sign-in to create or access your account.
-
-
-
-2. Generate Your Public Link
-
-Once authenticated, navigate to your dashboard where you can create and manage your personal public feedback link.
-
-
-
-3. Share & Collect Feedback
-
-Distribute your unique link to friends, colleagues, or online communities.
-
-View incoming anonymous feedback in real time.
-
-
-
-4. Manage Feedback
-
-Use dashboard features to mark, archive, or delete feedback messages.
-
+If this project is open source, add your license details here (for example, MIT).  
+If no license is currently defined, consider adding a `LICENSE` file.
 
 ---
 
-Contributing
-
-Contributions are welcome! If you'd like to improve WhisperBox or add new features, please follow these steps:
-
-1. Fork the Repository
-
-
-2. Create a New Branch
-
-git checkout -b feature/your-feature-name
-
-
-3. Commit Your Changes
-
-git commit -m "Add feature: description"
-
-
-4. Push to Your Branch
-
-git push origin feature/your-feature-name
-
-
-5. Open a Pull Request
-Include a detailed description of your changes.
-
-
----
-
-
-Happy coding and thank you for using WhisperBox!
-
-
-
+Made with ❤️ using Next.js + TypeScript.
